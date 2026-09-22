@@ -154,6 +154,7 @@ Noctalia 自己的设置不在本仓库（位于 `~/.local/state/noctalia/settin
 | 点了壁纸没变化 | 确认 Noctalia 在运行，`noctalia msg wallpaper-get` 能返回路径 |
 | 配色不跟随壁纸 | 打开一次壁纸页会自动同步；再不行检查 `matugen` |
 | 换壁纸时弹密码框 | Noctalia 的 greeter 自动同步未关，见 3.5 第 3 点 |
+| 从 Spotlight 启动的应用是英文 | 实例进程丢了会话语言；启动脚本已会补回中文，重启实例即可。若某个应用之前记过英文（Chrome、Firefox 会记住界面语言），需要在它自己的设置里改一次 |
 | 挪动了项目目录 | 重新运行 `install.sh`，或设置 `CLAVIS_SPOTLIGHT_ROOT` |
 
 日志：`qs -p <项目>/upstream/spotlight.qml log`。

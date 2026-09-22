@@ -20,6 +20,18 @@ export CLAVIS_STATE_HOME="/home/liulisakuya/项目/spotlight-standalone/state/st
 export CLAVIS_CACHE_HOME="/home/liulisakuya/项目/spotlight-standalone/state/cache"
 export CLAVIS_KEY="${spotlight_key}"
 
+# 从这里启动的应用会继承本进程的环境。若启动者（脚本、沙箱、systemd 单元）丢了会话语言，
+# Chrome、Firefox 这类程序就会变成英文界面，所以在拉起实例前先补回桌面语言。
+if [[ -z ${LANG:-} || ${LANG} == C || ${LANG} == C.UTF-8 || ${LANG} == POSIX ]]; then
+    export LANG="${CLAVIS_SPOTLIGHT_LANG:-zh_CN.UTF-8}"
+fi
+for locale_var in LC_ALL LC_MESSAGES; do
+    value="${!locale_var:-}"
+    if [[ ${value} == C || ${value} == C.UTF-8 || ${value} == POSIX ]]; then
+        unset "${locale_var}"
+    fi
+done
+
 call_spotlight() {
     qs -p "${spotlight_config}" ipc call spotlight "$@"
 }
