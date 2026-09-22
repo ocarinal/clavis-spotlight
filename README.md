@@ -176,3 +176,16 @@ Noctalia 自己的设置不在本仓库（位于 `~/.local/state/noctalia/settin
 
 上游项目及其依赖各自的许可证随源码保留（见 `upstream/LICENSE`、`upstream/licenses/`）。
 本仓库只是个人使用的修改快照。
+
+---
+
+## 10. 以后怎么更新这份快照
+
+两种做法任选：
+
+- **以仓库为主（推荐）**：把本仓库放在固定路径（例如 `~/项目/clavis-spotlight`），
+  直接在这里改代码，然后 `./install.sh` 让系统用上改动（脚本会把本目录路径写进启动脚本），
+  最后 `git add -A && git commit -m "…" && git push` 保存快照。
+- **以现有目录为主**：先改当前在用的目录，然后把改动同步进本仓库再提交推送。
+
+无论哪种，都不需要重新配置 Noctalia 那三处设置——它们保存在 Noctalia 自己的配置里。
