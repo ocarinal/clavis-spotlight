@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Spotlight
+Comment=Open the Clavis Spotlight launcher
+Comment[zh_CN]=打开 Clavis Spotlight 启动器
+Exec=/home/liulisakuya/.local/bin/clavis-spotlight
+Icon=/home/liulisakuya/.local/share/icons/clavis-spotlight.svg
+Terminal=false
+StartupNotify=false
+Categories=Utility;
+Keywords=spotlight;launcher;search;启动器;

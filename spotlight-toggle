@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly spotlight_root="${CLAVIS_SPOTLIGHT_ROOT:-/home/liulisakuya/项目/spotlight-standalone}/upstream"
+readonly spotlight_config="${spotlight_root}/spotlight.qml"
+readonly spotlight_imports="${spotlight_root}/build/qml"
+readonly spotlight_key="/home/liulisakuya/项目/clavis/key-cli/.venv/bin/key"
+
+# Waiting long enough matters more than starting fast: the first press after a
+# boot or a resume may have to bring the surface up from nothing.
+readonly ready_attempts=240
+readonly ready_interval=0.05
+
+export QML_IMPORT_PATH="${spotlight_imports}${QML_IMPORT_PATH:+:${QML_IMPORT_PATH}}"
+export MALLOC_CONF="${MALLOC_CONF-thp:never,narenas:4,dirty_decay_ms:3000}"
+export CLAVIS_PROFILE="spotlight"
+export CLAVIS_CONFIG_HOME="/home/liulisakuya/项目/spotlight-standalone/state/config"
+export CLAVIS_DATA_HOME="/home/liulisakuya/项目/spotlight-standalone/state/data"
+export CLAVIS_STATE_HOME="/home/liulisakuya/项目/spotlight-standalone/state/state"
+export CLAVIS_CACHE_HOME="/home/liulisakuya/项目/spotlight-standalone/state/cache"
+export CLAVIS_KEY="${spotlight_key}"
+
+call_spotlight() {
+    qs -p "${spotlight_config}" ipc call spotlight "$@"
+}
+
+instance_alive() {
+    qs -p "${spotlight_config}" ipc show >/dev/null 2>&1
+}
+
+start_spotlight() {
+    if instance_alive; then
+        return 0
+    fi
+
+    mkdir -p "${CLAVIS_CONFIG_HOME}" "${CLAVIS_DATA_HOME}" "${CLAVIS_STATE_HOME}" "${CLAVIS_CACHE_HOME}"
+    qs -p "${spotlight_config}" --no-duplicate --daemonize
+}
+
+wait_for_spotlight() {
+    local attempt
+    for ((attempt = 0; attempt < ready_attempts; attempt++)); do
+        if call_spotlight "$@" >/dev/null 2>&1; then
+            return 0
+        fi
+        sleep "${ready_interval}"
+    done
+    return 1
+}
+
+# Start, restart, or replace the surface as needed, then deliver the request.
+# Every caller (Super+S, the dock shortcut, the Noctalia bar action) goes
+# through this, so a dead or wedged instance never leaves the launcher
+# unreachable.
+ensure_spotlight() {
+    if call_spotlight "$@" >/dev/null 2>&1; then
+        return 0
+    fi
+    start_spotlight
+    if wait_for_spotlight "$@"; then
+        return 0
+    fi
+    # An instance that answers nothing is wedged rather than absent.
+    qs -p "${spotlight_config}" kill >/dev/null 2>&1 || true
+    sleep 0.3
+    start_spotlight
+    if wait_for_spotlight "$@"; then
+        return 0
+    fi
+    printf 'Spotlight did not become ready. Check: qs -p %q log\n' "${spotlight_config}" >&2
+    return 1
+}
+
+ipc_arguments() {
+    case "$1" in
+        modes) printf '%s\n' modes ;;
+        apps|files|wallpapers|clipboard|commands|search) printf 'openMode\n%s\n' "$1" ;;
+        *) printf '%s\n' "$1" ;;
+    esac
+}
+
+command="${1:-toggle}"
+case "${command}" in
+    start)
+        start_spotlight
+        ;;
+    status)
+        if instance_alive; then
+            printf 'running\n'
+        else
+            printf 'stopped\n'
+            exit 1
+        fi
+        ;;
+    toggle|open|close|modes|apps|files|wallpapers|clipboard|commands|search)
+        mapfile -t ipc_args < <(ipc_arguments "${command}")
+        ensure_spotlight "${ipc_args[@]}"
+        ;;
+    stop)
+        qs -p "${spotlight_config}" kill || true
+        ;;
+    *)
+        printf 'Usage: %s [toggle|open|close|start|stop|status|modes|search|apps|files|wallpapers|clipboard|commands]\n' "$0" >&2
+        exit 2
+        ;;
+esac

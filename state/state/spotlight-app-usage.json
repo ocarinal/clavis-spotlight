@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "applications": {
+    "qq": {
+      "launchCount": 3,
+      "lastLaunchedAt": 1790112453790
+    },
+    "org.kde.dolphin": {
+      "launchCount": 1,
+      "lastLaunchedAt": 1790101549591
+    },
+    "org.gnome.Calculator": {
+      "launchCount": 1,
+      "lastLaunchedAt": 1790103912415
+    },
+    "com.follow.clash": {
+      "launchCount": 1,
+      "lastLaunchedAt": 1790104472528
+    },
+    "avahi-discover": {
+      "launchCount": 2,
+      "lastLaunchedAt": 1790111271753
+    },
+    "org.cachyos.KernelManager": {
+      "launchCount": 1,
+      "lastLaunchedAt": 1790105567960
+    },
+    "org.clavis.Settings": {
+      "launchCount": 1,
+      "lastLaunchedAt": 1790112777254
+    },
+    "dev.noctalia.Noctalia": {
+      "launchCount": 1,
+      "lastLaunchedAt": 1790112863808
+    },
+    "org.gnome.Nautilus": {
+      "launchCount": 1,
+      "lastLaunchedAt": 1790115380711
+    }
+  }
+}

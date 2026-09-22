@@ -1,0 +1,13 @@
+# 构建产物（运行 install.sh 会重新生成）
+upstream/build/
+
+# 上游仓库自带的 git 元数据不随本快照发布
+upstream/.git/
+
+# 运行时缓存
+state/cache/
+
+# 编辑器与临时文件
+*.log
+*.bak
+.qmlls.ini
