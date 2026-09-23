@@ -21,7 +21,6 @@
 | 剪贴板监听 | systemd 用户服务 `clavis-clipboard.service` | 由 key-cli 提供，随开机启动 |
 | 快捷键与自启动 | niri 配置 | `Mod+S` 呼出，登录时预热后台实例 |
 | dock 快捷方式 | `~/.local/share/applications/clavis-spotlight.desktop` | dock 最左侧图标，资产在 `assets/` |
-| dock 本体 | `upstream/` 的 Clavis Dock 模块 + `state/config/dock.json` | 与 Spotlight 同一套配色与背景模糊；Noctalia 自带的 dock 已关闭 |
 
 关键设计：**本入口使用隔离的配置目录**（`upstream/` 之外的 `state/`），
 拥有自己的主题、偏好与历史，不会与其他 Clavis 实例互相覆盖；
@@ -116,8 +115,6 @@ systemctl --user status clavis-clipboard.service
 - 第四个圆：文件搜索，输入 `Wallpapers` 或 `png` 应有结果。
 - 第一个圆：网络搜索；点胶囊上的「Google」切换搜索引擎，选择会被记住。
 - 应用图标：右键可置顶 / 隐藏 / 显示隐藏项 / 恢复自动排序；长按约半秒可拖动排序。
-- dock：底部一条圆角玻璃条，鼠标移上去图标放大，启动时弹跳，悬停可看窗口预览；
-  拖应用图标到 dock 即可固定，右键可取消固定 / 打开新窗口 / 关闭窗口。
 
 ---
 
@@ -160,8 +157,6 @@ Noctalia 自己的设置不在本仓库（位于 `~/.local/state/noctalia/settin
 | 配色不跟随壁纸 | 打开一次壁纸页会自动同步；再不行检查 `matugen` |
 | 换壁纸时弹密码框 | Noctalia 的 greeter 自动同步未关，见 3.5 第 3 点 |
 | 从 Spotlight 启动的应用是英文 | 实例进程丢了会话语言；启动脚本已会补回中文，重启实例即可。若某个应用之前记过英文（Chrome、Firefox 会记住界面语言），需要在它自己的设置里改一次 |
-| dock 出现在两个屏幕 | Clavis dock 默认每个屏幕一条；想只留主屏，改 `upstream/Modules/Dock/DockHost.qml` 里的屏幕过滤条件 |
-| 想换回 Noctalia 的 dock | `noctalia msg dock-show`，并把 `state/config/dock.json` 的 `options.enabled` 改成 `false` |
 | 挪动了项目目录 | 重新运行 `install.sh`，或设置 `CLAVIS_SPOTLIGHT_ROOT` |
 
 日志：`qs -p <项目>/upstream/spotlight.qml log`。

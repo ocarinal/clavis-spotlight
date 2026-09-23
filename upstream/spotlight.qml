@@ -4,7 +4,6 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import qs.Modules.Dock
 import qs.Modules.Launcher
 import qs.Modules.ControlCenter
 import qs.Services
@@ -30,9 +29,6 @@ ShellRoot {
     LauncherWindow {
         id: launcher
     }
-
-    // 与 Spotlight 同一套配色与模糊的 dock，替代 Noctalia 自带的 dock。
-    DockHost {}
 
     LazyLoader {
         id: controlCenterLoader
