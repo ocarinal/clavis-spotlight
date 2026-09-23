@@ -3,13 +3,13 @@
   "options": {
     "enabled": true,
     "position": "bottom",
-    "iconSize": 44,
+    "iconSize": 34,
     "magnification": true,
-    "magnificationScale": 1.45,
+    "magnificationScale": 1.2,
     "autoHide": false,
     "launchBounce": true,
     "showIndicators": true,
-    "showRecent": true,
+    "showRecent": false,
     "showThumbnails": true,
     "previewSize": 160,
     "contextPinning": true
